@@ -1,7 +1,7 @@
 from time import gmtime, strftime
 from xml.etree.ElementTree import *
 
-__path = "save.xml"
+__path = "../data/save.xml"
 
 
 def create_data():

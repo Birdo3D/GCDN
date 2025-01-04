@@ -1,11 +1,12 @@
 class User:
-    def __init__(self, id: int, name: str, mdp: str, age: int, musics: list):
+    def __init__(self, id: int, name: str, mdp: str, age: int, genre: str, artists):
         """Création d'un nouvel utilisateur"""
         self.__id = id
         self.__name = name
         self.__mdp = mdp
         self.__age = age
-        self.__musics = musics
+        self.__genre = genre
+        self.__artists = artists
 
     def set_mdp(self, mdp: str):
         """Met à jour le mot de passe de l'utilisateur"""
@@ -38,10 +39,18 @@ class User:
         """Retourne l'âge de l'utilisateur"""
         return self.__age
 
-    def get_musics(self) -> list:
-        """Renvoie les préférences musicales de l'utilisateur"""
-        return self.__musics
+    def get_genre(self) -> str:
+        """Retourne le genre préféré de l'utilisateur"""
+        return self.__genre
 
-    def set_musics(self, musics: list):
-        """Met à jour les préférences musicales de l'utilisateur"""
-        self.__musics = musics
+    def set_genre(self, genre: str):
+        """Met à jour le genre préféré de l'utilisateur"""
+        self.__genre = genre
+
+    def get_artists(self):
+        """Retourne les artistes préférés de l'utilisateur"""
+        return self.__artists
+
+    def set_artists(self, artists):
+        """Met à jour les artistes préférés de l'utilisateur"""
+        self.__artists = artists

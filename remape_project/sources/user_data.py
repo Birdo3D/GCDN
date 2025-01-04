@@ -1,25 +1,32 @@
-from user import *
-import app_data as app
+import remape_project.sources.app_data as app
 from xml.etree.ElementTree import *
-from encrypter import *
+
+from remape_project.sources.math.pile import Pile
+
+'''import sys
+import os
+sys.path.insert(1, os.path.abspath('/'))'''
+from user import *
+from remape_project.sources.math.encrypter import *
 
 __users = []
 __main_user = None
-__path = "users.xml"
+__path = "../data/users.xml"
 
 
-def create_user(name: str, mdp: str, age: int, musics: list) -> bool:
+def create_user(name: str, mdp: str, age: int, genre: str, artists) -> bool:
     """Ajoute un utilisateur à l'application"""
     id = app.generate_id()
-    user = User(id, name, chiffrement_vigenere(get_char(int(str(id)[0])), mdp), age, musics) # Create user object & Encrypt password
+    user = User(id, name, chiffrement_mystere(get_char(int(str(id)[0])), mdp), age, genre,
+                artists)  # Create user object & Encrypt password
     if not __user_registered(user):
-        app.inc_ids() # Increment user count
-        add_user(user) # Register user in app
-        set_default_user(user) # Set default user in app
-        __register_user(user) # Register user in users.xml
-        return True # Tout s'est correctement dérouler dans la création du nouvel utilisateur
+        app.inc_ids()  # Increment user count
+        add_user(user)  # Register user in app
+        set_default_user(user)  # Set default user in app
+        __register_user(user)  # Register user in users.xml
+        return True  # Tout s'est correctement dérouler dans la création du nouvel utilisateur
     else:
-        return False # Ce nom est déjà pris
+        return False  # Ce nom est déjà pris
 
 
 def add_user(user):
@@ -34,6 +41,7 @@ def set_default_user(user):
     global __main_user
     __main_user = user
 
+
 def get_default_user():
     return __main_user
 
@@ -44,9 +52,11 @@ def __register_user(user):
     SubElement(second, "name").text = user.get_name()
     SubElement(second, "password").text = str(user.get_mdp())
     SubElement(second, "age").text = str(user.get_age())
-    titles = SubElement(second, "musics")
-    for music in user.get_musics():
-        SubElement(titles, "title-id").text = "4568"
+    SubElement(second, "genre").text = str(user.get_genre())
+    titles = SubElement(second, "artists")
+    arts = user.get_artists().copy()
+    for i in range(arts.taille()):
+        SubElement(titles, "artist-id").text = arts.depiler()
     tree = ElementTree(root)
     indent(tree, space="    ")
     tree.write(__path)
@@ -61,14 +71,16 @@ def make_file():
     indent(tree, space="    ")
     tree.write(__path)
 
+
 def get_registered_user(id: int):
     tree = parse(__path)
     for elt in tree.getroot():
         if int(elt.attrib["id"]) == id:
-            titles = []
-            for m in elt[3]:
-                titles.append(m.text)
-            return User(int(elt.attrib["id"]), elt[0].text, elt[1].text, int(elt[2].text), titles)
+            arts = Pile()
+            for m in elt[4]:
+                arts.empiler(m.text)
+            return User(int(elt.attrib["id"]), elt[0].text, elt[1].text, int(elt[2].text), elt[3].text, arts)
+
 
 def get_registered_ids():
     ids = []
@@ -83,3 +95,14 @@ def __user_registered(user) -> bool:
     tree = parse(__path)
     for elt in tree.getroot():
         return str(user.get_name()) == elt[0].text
+
+
+def user_exist(name: str) -> bool:
+    for user in __users:
+        return user.get_name() == name
+    return False
+
+def get_user(name: str) -> User:
+    for user in __users:
+        if user.get_name() == name:
+            return user

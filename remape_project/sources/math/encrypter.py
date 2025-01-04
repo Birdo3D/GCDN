@@ -36,9 +36,9 @@ def chiffrement_message(a: int, b: int, m: str) -> str:
     return c
 
 
-def chiffrement_vigenere(key: str, text: str) -> str:
+def chiffrement_mystere(key: str, text: str) -> str:
     """
-        Encore une chaîne de caractères à l'aide du chiffrement de Vigenère.
+        Encore une chaîne de caractères à l'aide d'une variante du chiffrement de Vigenère.
         :param key: Clé d'encodage
         :param text: Message à encoder
         :return: Message encodé
