@@ -50,7 +50,7 @@ class App(ctk.CTk):
         ar.empiler("Zazie")
         ar.empiler("kaaris")
 
-        self.propositions = creer_playlist("pop", ["PLK", "maes", "kaaris"], 20)
+        self.propositions = creer_playlist("pop", ar, 20)
 
         self.playlist = File()
 
@@ -123,13 +123,12 @@ class App(ctk.CTk):
         title = self.propositions.defiler()
 
         # Image de l'album
-        link = "https://cdn-images.dzcdn.net/images/artist/90fda6aa551a34c05671f53c4ea71390/250x250-000000-80-0-0.jpg"
-        img = WebImage(link, 10).get()
+        img = WebImage(title["cover"], 10).get()
         imagelab = ctk.CTkLabel(self.main_frame, image=img, text="")
         imagelab.pack(pady=20)
 
         # Titre de la musique
-        self.song_title = ctk.CTkLabel(self.main_frame, text=title["titre"], font=ctk.CTkFont(size=16, weight="bold"))
+        self.song_title = ctk.CTkLabel(self.main_frame, text=title["artist"] + " - " + title["titre"], font=ctk.CTkFont(size=16, weight="bold"))
         self.song_title.pack(pady=10)
 
         # Boutons "J'aime" et "J'aime pas"

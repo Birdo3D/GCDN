@@ -5,7 +5,7 @@ from sources.math.file import *
 from sources.math.pile import *
 
 
-def creer_playlist(genre_prefere, artistes_favoris, age_utilisateur):
+def creer_playlist(genre_prefere: str, artistes: Pile, age_utilisateur: int):
     """
     Creer une playlist de 20 musiques en utilisant l'API de Deezer
     
@@ -17,6 +17,10 @@ def creer_playlist(genre_prefere, artistes_favoris, age_utilisateur):
     Retourne:
     - list: Une playlist contenant 15 musiques (titre + artiste + id)
     """
+    artistes_favoris = []
+    for _ in range(artistes.taille()):
+        artistes_favoris.append(artistes.depiler())
+
     # URL de base de l'API Deezer
     base_url = "https://api.deezer.com/search?q="
 
@@ -89,6 +93,9 @@ def creer_playlist(genre_prefere, artistes_favoris, age_utilisateur):
 if __name__ == "__main__":
     age_utilisateur = 25
     genre = "rap"
-    artistes_favoris = ["mac miller", "sch", "alpha wann"]
-    playlist = creer_playlist(genre, list(artistes_favoris), age_utilisateur)
+    artistes_favoris = Pile()
+    artistes_favoris.empiler("mac miller")
+    artistes_favoris.empiler("sch")
+    artistes_favoris.empiler("alpha wann")
+    playlist = creer_playlist(genre, artistes_favoris, age_utilisateur)
     print(playlist)
