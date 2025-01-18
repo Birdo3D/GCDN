@@ -1,6 +1,8 @@
 import customtkinter as ctk
+from sources.user_data import *
+from sources.math.pile import *
 
-ctk.set_appearance_mode("System")  # Modes: "System", "Light", "Dark"
+ctk.set_appearance_mode("Dark")  # Modes: "System", "Light", "Dark"
 ctk.set_default_color_theme("blue")
 
 
@@ -23,11 +25,12 @@ class SettingsApp(ctk.CTk):
         self.title_label.pack(pady=20, padx=25, anchor="w")
 
         # Paramètres
+        ars = user.get_artists().copy()
         self.create_setting_row("Pseudo", user.get_name())
         self.create_setting_row("Âge", str(user.get_age()))
-        self.create_setting_row("Artiste 1", "PLK")
-        self.create_setting_row("Artiste 2", "Goldman")
-        self.create_setting_row("Artiste 3", "Zazie")
+        self.create_setting_row("Artiste 1", ars.depiler())
+        self.create_setting_row("Artiste 2", ars.depiler())
+        self.create_setting_row("Artiste 3", ars.depiler())
 
         # Genre de musique préférés
         self.genre_label = ctk.CTkLabel(self, text="Genre de musique préféré :", font=("Arial", 14))
@@ -88,6 +91,35 @@ class SettingsApp(ctk.CTk):
             if new_value:
                 value_label.configure(new_value)
                 change_window.destroy()
+                n = None
+                ag = None
+                ar = None
+                p = None
+                if field_name == "Pseudo":
+                    n = new_value
+                elif field_name == "Âge":
+                    ag = new_value
+                elif field_name == "Artiste 1":
+                    ar = Pile()
+                    ar.empiler(new_value)
+                    ar.empiler(self.usr.get_artists().depiler())
+                    ar.empiler(self.usr.get_artists().depiler())
+                elif field_name == "Artiste 2":
+                    ar = Pile()
+                    ar.empiler(new_value)
+                    ar.empiler(self.usr.get_artists().depiler())
+                    self.usr.get_artists().depiler()
+                    ar.empiler(self.usr.get_artists().depiler())
+                elif field_name == "Artiste 3":
+                    ar = Pile()
+                    ar.empiler(new_value)
+                    self.usr.get_artists().depiler()
+                    ar.empiler(self.usr.get_artists().depiler())
+                    ar.empiler(self.usr.get_artists().depiler())
+                elif field_name == "Mot de passe":
+                    p = new_value
+                update_user(self.usr, n, ag, None, ar, p)
+
 
         save_button = ctk.CTkButton(change_window, text="Enregistrer", command=save_change)
         save_button.pack(pady=20)

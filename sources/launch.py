@@ -1,6 +1,6 @@
 from os import *
-import remape_project.sources.user_data as data
-import remape_project.sources.app_data as app
+import sources.user_data as data
+import sources.app_data as app
 
 
 def __first_start():

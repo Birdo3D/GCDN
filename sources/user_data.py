@@ -1,13 +1,8 @@
-import remape_project.sources.app_data as app
+import sources.app_data as app
 from xml.etree.ElementTree import *
-
-from remape_project.sources.math.pile import Pile
-
-'''import sys
-import os
-sys.path.insert(1, os.path.abspath('/'))'''
-from user import *
-from remape_project.sources.math.encrypter import *
+from sources.math.pile import Pile
+from sources.user import *
+from sources.math.encrypter import *
 
 __users = []
 __main_user = None
@@ -64,9 +59,10 @@ def __register_user(user):
 
 def make_file():
     root = Element("users")
-    second = SubElement(root, "user", attrib={"id": "0"})
+    """second = SubElement(root, "user", attrib={"id": "0"})
     SubElement(second, "name").text = "nametest"
     SubElement(second, "age").text = "25"
+    """
     tree = ElementTree(root)
     indent(tree, space="    ")
     tree.write(__path)
@@ -106,3 +102,27 @@ def get_user(name: str) -> User:
     for user in __users:
         if user.get_name() == name:
             return user
+
+def update_user(user: User, name: str, age: int, genre: str, artists: Pile, pwd: str):
+    tree = parse(__path)
+    main = ""
+    for elt in tree.getroot():
+        if int(elt.attrib["id"]) == user.get_id():
+            main = elt
+    if name is not None:
+        user.set_name(name)
+        main[0].text = name
+    if age is not None:
+        user.set_age(age)
+        main[2].text = str(age)
+    if genre is not None:
+        user.set_genre(genre)
+        main[3].text = genre
+    if artists is not None:
+        user.set_artists(artists)
+        for i in range(artists.taille()):
+            main[4][i].text = artists.depiler()
+    if pwd is not None:
+        user.set_mdp(pwd)
+        main[1].text = pwd
+    tree.write(__path)

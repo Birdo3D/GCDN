@@ -33,7 +33,7 @@ class File:
     def copy(self):
         """Retourne une copie de la file"""
         new_file = File()
-        new_file.__pile = self.__file[:]
+        new_file.__file = self.__file[:]
         return new_file
 
     def __str__(self):
